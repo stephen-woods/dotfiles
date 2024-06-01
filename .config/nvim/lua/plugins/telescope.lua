@@ -7,6 +7,7 @@ return {
       "nvim-telescope/telescope-dap.nvim",
       "nvim-telescope/telescope-fzf-native.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
+      "xiyaowong/telescope-emoji.nvim",
     },
     config = function()
       require("telescope").setup {
@@ -71,6 +72,18 @@ return {
             fuzzy = true,
             override_file_sort = true,
             case_mode = "smart_case",
+          },
+          emoji = {
+            action = function(emoji)
+              -- argument emoji is a table.
+              -- {name="", value="", cagegory="", description=""}
+
+              vim.fn.setreg("*", emoji.value)
+              print([[Press p or "*p to paste this emoji]] .. emoji.value)
+
+              -- insert emoji when picked
+              -- vim.api.nvim_put({ emoji.value }, 'c', false, true)
+            end,
           }
         },
       }
@@ -86,8 +99,9 @@ return {
         function ()
           builtin.find_files( { follow = true, no_ignore = true, hidden = true, prompt_title = 'Find All Files' })
         end,
-        { desc = '[S]earch all [F]iles'}
+        { desc = '[S]earch [A]ll files'}
       )
+      vim.keymap.set('n', '<leader>se', "<CMD>Telescope emoji<CR>", { desc = '[S]earch [E]moji Telescope' })
       vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
