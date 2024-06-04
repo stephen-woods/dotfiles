@@ -94,13 +94,6 @@ return {
         }
       })
 
-      lspconfig.rust_analyzer.setup({
-        capabilities = capabilities,
-        settings = {
-          rust_analyzer = {}
-        }
-      })
-
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -190,8 +183,8 @@ return {
   },
   {
     'mrcjkb/rustaceanvim',
-    version = '^3', -- Recommended
-    ft = { 'rust' },
+    version = '^4', -- Recommended
+    lazy = false,
   },
   {
     "scalameta/nvim-metals",
