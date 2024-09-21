@@ -15,6 +15,9 @@ vim.opt.clipboard = 'unnamedplus'
 -- Enable break indent
 vim.opt.breakindent = true
 
+-- Concealed text is completely hidden unless it has custom syntax highlighting
+vim.opt.conceallevel = 2
+
 -- Enable US English spell check.
 -- Use ]s will go to the next misspelled word
 -- Use [s will go to the previous misspelled word
