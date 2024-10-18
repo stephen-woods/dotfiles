@@ -1,6 +1,9 @@
 [font.normal]
 family = "JetBrainsMono Nerd Font"
 style = "Regular"
+# family = "YaHei Consolas Hybrid"
+# style = "Regular"
+
 
 [window]
 opacity = 0.9
