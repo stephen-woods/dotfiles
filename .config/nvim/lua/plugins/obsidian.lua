@@ -8,9 +8,7 @@ return {
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "nvim-telescope/telescope.nvim",
     "nvim-treesitter/nvim-treesitter",
-    "hrsh7th/nvim-cmp",
   },
   keys = {
     { "<leader>nd", ":ObsidianToday<cr>", desc = "obsidian [d]aily" },
