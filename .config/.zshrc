@@ -1,4 +1,4 @@
-# zmodload zsh/zprof
+#zmodload zsh/zprof
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -72,15 +72,17 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  fzf
   git
   mvn
   sbt
   kubectl
   autojump
-#  nvm
-#  zsh-autosuggestions
-#  zsh-syntax-highlighting
+  direnv
+  vi-mode
+  fzf
+  nvm
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -113,70 +115,81 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# As suggested by tmux-setup-xdg.sh in dotfiles
 # XDG Base Directory specification
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-
-# Use tmux with XDG paths
 alias tmux="$XDG_CONFIG_HOME/tmux/tmux-wrapper.sh"
+
+# Optimize FZF
+export FZF_DEFAULT_OPTS="--height 40% --border"
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
+
 export VAULT_ADDR=https://or.vault.comcast.com
 export AWS_PROFILE=saml
 
+
+#cluster access aliases
+alias na='open https://microsoft.com/devicelogin;aadawscli --profile-name na --account-id 196111890883 --role OneCloud/HIPUserAccess | tee >(grep "[A-Z0-9][A-Z0-9]\+" -o -m 1 | pbcopy)'
+alias eu='open https://microsoft.com/devicelogin;aadawscli --profile-name eu --account-id 385469752808 --role ApplicationOwner | tee >(grep "[A-Z0-9][A-Z0-9]\+" -o -m 1 | pbcopy)'
+alias ap='open https://microsoft.com/devicelogin;aadawscli --profile-name ap --account-id 018982855310 --role ApplicationOwner | tee >(grep "[A-Z0-9][A-Z0-9]\+" -o -m 1 | pbcopy)'
+alias eu_stage='open https://microsoft.com/devicelogin;aadawscli --profile-name stage-eu --account-id 661752356268 --role ApplicationOwner | tee >(grep "[A-Z0-9][A-Z0-9]\+" -o -m 1 | pbcopy)' 
+
 function pullify() {
   git config --add remote.upstream.fetch '+refs/pull/*/head:refs/remotes/upstream/pr/*'
-  git config --add remote.origin,fetch '+refs/pull/*/head:refs/remotes/origin/pr/*'
+  git config --add remote.origin.fetch '+refs/pull/*/head:refs/remotes/origin/pr/*'
 }
 
-export KUBECONFIG=~/.kube/cs-nonprod-ccp-as-rke2
+export KUBECONFIG=~/.kube/cd-nonprod-ccp-as-rke2
 
 export PATH="$HOME/.rustup/toolchains/$(rustup show active-toolchain | cut -d ' ' -f1)/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOMR/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
 [[ -s "${SDKMAN_DIR}/bin/sdkman-init.sh" ]] && source "${SDKMAN_DIR}/bin/sdkman-init.sh"
 
 # export NVM_DIR="$HOME/.nvm"
-#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+ [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+ # [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Replace the standard NVM loading with this lazy-loading function
 export NVM_DIR="$HOME/.nvm"
 
 # Create placeholder nvm function
-nvm() {
-  # Remove the placeholder function
-  unfunction nvm
-  
-  # Load the real NVM
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-  
-  # Call the real nvm with the provided arguments
-  nvm "$@"
-}
-
-# Create placeholder functions for node, npm, etc.
-node() {
-  unfunction node
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-  node "$@"
-}
-
-npm() {
-  unfunction npm
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-  npm "$@"
-}
-
-npx() {
-  unfunction npx
-  [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-  npx "$@"
-}
+# nvm() {
+#   # Remove the placeholder function
+#   unfunction nvm
+#
+#   # Load the real NVM
+#   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+#
+#   # Call the real nvm with the provided arguments
+#   nvm "$@"
+# }
+#
+# # Create placeholder functions for node, npm, etc.
+# node() {
+#   unfunction node
+#   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+#   node "$@"
+# }
+#
+# npm() {
+#   unfunction npm
+#   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+#   npm "$@"
+# }
+#
+# npx() {
+#   unfunction npx
+#   [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+#   npx "$@"
+# }
 
 
 # Autojump configuration
 [ -f $(brew --prefix)/etc/profile.d/autojump.sh ] && . $(brew --prefix)/etc/profile.d/autojump.sh
-
 # zprof
