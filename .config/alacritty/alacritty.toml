@@ -4,7 +4,12 @@ style = "Regular"
 # family = "YaHei Consolas Hybrid"
 # style = "Regular"
 
-
 [window]
 opacity = 0.9
 option_as_alt = "Both"
+
+[keyboard]
+bindings = [
+  # Unbind Command+W to prevent window closing
+  { key = "W", mods = "Command", action = "None" },
+]
